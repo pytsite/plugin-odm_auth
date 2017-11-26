@@ -1,0 +1,23 @@
+{
+  "name": "odm_auth",
+  "version": "1.0",
+  "description": {
+    "en": "Odm Auth",
+    "ru": "Odm Auth",
+    "uk": "Odm Auth"
+  },
+  "url": "https://github.com/pytsite/plugin-odm_auth",
+  "author": {
+    "name": "Alexander Shepetko",
+    "email": "a@shepetko.com",
+    "url": "https://shepetko.com"
+  },
+  "requires": {
+    "packages": [],
+    "plugins": [
+      "auth",
+      "odm",
+      "permissions"
+    ]
+  }
+}
