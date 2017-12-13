@@ -13,7 +13,7 @@ def odm_register_model(model: str, cls, replace: bool):
     """odm.register
     """
     # Check if the model supports permissions
-    if not issubclass(cls, _model.AuthorizableEntity):
+    if not issubclass(cls, _model.OwnedEntity):
         return
 
     # Determining model's package name
@@ -27,7 +27,7 @@ def odm_register_model(model: str, cls, replace: bool):
     perm_group = cls.odm_auth_permissions_group()
     if perm_group:
         # Registering permissions
-        mock = _odm.dispense(model)  # type: _model.AuthorizableEntity
+        mock = _odm.dispense(model)  # type: _model.OwnedEntity
         for perm_name in mock.odm_auth_permissions():
             if perm_name.endswith('_own') and not mock.has_field('author') and not mock.has_field('owner'):
                 continue
@@ -38,11 +38,11 @@ def odm_register_model(model: str, cls, replace: bool):
                 _permission.define_permission(p_name, p_description, perm_group)
 
 
-def odm_entity_pre_save(entity: _model.AuthorizableEntity):
+def odm_entity_pre_save(entity: _model.OwnedEntity):
     """odm.entity_pre_save
     """
     # Check if the model supports permissions
-    if not isinstance(entity, _model.AuthorizableEntity):
+    if not isinstance(entity, _model.OwnedEntity):
         return
 
     c_user = _auth.get_current_user()
@@ -64,11 +64,11 @@ def odm_entity_pre_save(entity: _model.AuthorizableEntity):
                                          format(entity.model, entity.id))
 
 
-def odm_entity_pre_delete(entity: _model.AuthorizableEntity):
+def odm_entity_pre_delete(entity: _model.OwnedEntity):
     """'odm.entity_pre_delete' event handler
     """
     # Check if the model supports permissions
-    if not isinstance(entity, _model.AuthorizableEntity):
+    if not isinstance(entity, _model.OwnedEntity):
         return
 
     c_user = _auth.get_current_user()

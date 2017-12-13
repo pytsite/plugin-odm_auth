@@ -8,7 +8,7 @@ __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
 
-class AuthorizableEntity(_odm.model.Entity):
+class OwnedEntity(_odm.model.Entity):
     """Entity which has owner and can be authorized to perform certain actions on it.
     """
 
