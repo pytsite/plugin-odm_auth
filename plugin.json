@@ -15,7 +15,7 @@
   "requires": {
     "packages": [],
     "plugins": [
-      "auth>=1.3",
+      "auth>=1.8",
       "odm",
       "permissions"
     ]

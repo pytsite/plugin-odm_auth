@@ -6,7 +6,7 @@
 
 ### 1.3 (2018-01-27)
 
-Support for `auth-1.3`.
+Support for `auth-1.8`.
 
 
 ### 1.2 (2017-12-13)
