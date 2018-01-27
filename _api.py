@@ -1,24 +1,26 @@
 """PytSite ODM Auth API Functions
 """
-from typing import Union as _Union
-from bson.objectid import ObjectId as _ObjectId
-from plugins import auth as _auth, permissions as _permissions, odm as _odm
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+from typing import Union as _Union
+from bson.objectid import ObjectId as _ObjectId
+from plugins import auth as _auth, permissions as _permissions, odm as _odm
 
 
 def check_permission(perm_type: str, model: str, entity_id: _Union[_ObjectId, str, None] = None,
                      user: _auth.model.AbstractUser = None) -> bool:
     """Check current user's permissions to operate with entity(es).
     """
-    global_perm_name = 'odm_auth.{}.{}'.format(perm_type, model)
-    personal_perm_name = 'odm_auth.{}_own.{}'.format(perm_type, model)
+    global_perm_name = 'odm_auth@{}.{}'.format(perm_type, model)
+    personal_perm_name = 'odm_auth@{}_own.{}'.format(perm_type, model)
 
-    # Get current user
     if not user:
         user = _auth.get_current_user()
+
+    if user.has_role(('admin', 'dev')):
+        return True
 
     # Check if the user has global permission
     if _permissions.is_permission_defined(global_perm_name) and user.has_permission(global_perm_name):

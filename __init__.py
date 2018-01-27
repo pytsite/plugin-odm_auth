@@ -4,12 +4,9 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from pytsite import plugman as _plugman
-
-if _plugman.is_installed(__name__):
-    # Public API
-    from . import _model as model
-    from ._api import check_permission
+# Public API
+from . import _model as model
+from ._api import check_permission
 
 
 def plugin_load():

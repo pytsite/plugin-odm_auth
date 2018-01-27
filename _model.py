@@ -1,11 +1,11 @@
 """PytSite ODM Authorizable Entity Model
 """
-from typing import Tuple as _Tuple
-from plugins import auth as _auth, odm as _odm
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+from typing import Tuple as _Tuple
+from plugins import auth as _auth, odm as _odm
 
 
 class OwnedEntity(_odm.model.Entity):

@@ -1,12 +1,12 @@
 """PytSite ODM Auth Event Handlers
 """
-from pytsite import lang as _lang, logger as _logger, errors as _errors
-from plugins import permissions as _permission, auth as _auth, odm as _odm
-from . import _model
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+from pytsite import lang as _lang, logger as _logger, errors as _errors
+from plugins import permissions as _permission, auth as _auth, odm as _odm
+from . import _model
 
 
 def odm_register_model(model: str, cls, replace: bool):
@@ -26,16 +26,15 @@ def odm_register_model(model: str, cls, replace: bool):
     # Register permissions
     perm_group = cls.odm_auth_permissions_group()
     if perm_group:
-        # Registering permissions
+        # Register permissions
         mock = _odm.dispense(model)  # type: _model.OwnedEntity
         for perm_name in mock.odm_auth_permissions():
             if perm_name.endswith('_own') and not mock.has_field('author') and not mock.has_field('owner'):
                 continue
 
-            p_name = 'odm_auth.' + perm_name + '.' + model
-            if not _permission.is_permission_defined(p_name):
-                p_description = cls.resolve_msg_id('odm_auth_' + perm_name + '_' + model)
-                _permission.define_permission(p_name, p_description, perm_group)
+            p_name = 'odm_auth@' + perm_name + '.' + model
+            p_description = cls.resolve_msg_id('odm_auth_' + perm_name + '_' + model)
+            _permission.define_permission(p_name, p_description, perm_group)
 
 
 def odm_entity_pre_save(entity: _model.OwnedEntity):
