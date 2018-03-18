@@ -4,7 +4,7 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from typing import Tuple as _Tuple
+from typing import Tuple as _Tuple, Iterable as _Iterable, Union as _Union
 from plugins import auth as _auth, odm as _odm
 
 
@@ -24,7 +24,7 @@ class OwnedEntity(_odm.model.Entity):
         """
         return 'create', 'view', 'modify', 'delete', 'view_own', 'modify_own', 'delete_own'
 
-    def odm_auth_check_permission(self, perm: str, user: _auth.model.AbstractUser = None) -> bool:
+    def odm_auth_check_permission(self, perm: _Union[str, _Iterable[str]], user: _auth.model.AbstractUser = None) -> bool:
         """Check user's permissions
         """
         from . import _api

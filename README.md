@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.4 (2018-03-18)
+
+Support for list as a first argument in `check_permission()`.
+
+
 ### 1.3 (2018-01-27)
 
 Support for `auth-1.8`.

@@ -4,15 +4,22 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from typing import Union as _Union
+from typing import Union as _Union, Iterable as _Iterable
 from bson.objectid import ObjectId as _ObjectId
 from plugins import auth as _auth, permissions as _permissions, odm as _odm
 
 
-def check_permission(perm_type: str, model: str, entity_id: _Union[_ObjectId, str, None] = None,
+def check_permission(perm_type: _Union[str, _Iterable[str]], model: str, entity_id: _Union[_ObjectId, str, None] = None,
                      user: _auth.model.AbstractUser = None) -> bool:
     """Check current user's permissions to operate with entity(es).
     """
+    if isinstance(perm_type, (list, tuple)):
+        for pt in perm_type:
+            if check_permission(pt, model, entity_id, user):
+                return True
+
+        return False
+
     global_perm_name = 'odm_auth@{}.{}'.format(perm_type, model)
     personal_perm_name = 'odm_auth@{}_own.{}'.format(perm_type, model)
 
