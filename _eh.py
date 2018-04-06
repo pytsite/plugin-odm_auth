@@ -4,37 +4,9 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from pytsite import lang as _lang, logger as _logger, errors as _errors
-from plugins import permissions as _permission, auth as _auth, odm as _odm
+from pytsite import logger as _logger, errors as _errors
+from plugins import auth as _auth
 from . import _model
-
-
-def odm_register_model(model: str, cls, replace: bool):
-    """odm.register
-    """
-    # Check if the model supports permissions
-    if not issubclass(cls, _model.OwnedEntity):
-        return
-
-    # Determining model's package name
-    pkg_name = cls.get_package_name()
-
-    # Registering package's language resources
-    if not _lang.is_package_registered(pkg_name):
-        raise RuntimeError("Language package '{}' is not registered".format(pkg_name))
-
-    # Register permissions
-    perm_group = cls.odm_auth_permissions_group()
-    if perm_group:
-        # Register permissions
-        mock = _odm.dispense(model)  # type: _model.OwnedEntity
-        for perm_name in mock.odm_auth_permissions():
-            if perm_name.endswith('_own') and not mock.has_field('author') and not mock.has_field('owner'):
-                continue
-
-            p_name = 'odm_auth@' + perm_name + '.' + model
-            p_description = cls.resolve_msg_id('odm_auth_' + perm_name + '_' + model)
-            _permission.define_permission(p_name, p_description, perm_group)
 
 
 def odm_entity_pre_save(entity: _model.OwnedEntity):
@@ -47,7 +19,7 @@ def odm_entity_pre_save(entity: _model.OwnedEntity):
     c_user = _auth.get_current_user()
 
     # System user and admins have unrestricted permissions
-    if c_user.is_system or c_user.is_admin:
+    if c_user.is_system or c_user.is_admin_or_dev:
         return
 
     # Check current user's permissions to CREATE entities
@@ -73,7 +45,7 @@ def odm_entity_pre_delete(entity: _model.OwnedEntity):
     c_user = _auth.get_current_user()
 
     # System user and admins have unrestricted permissions
-    if c_user.is_system or c_user.is_admin:
+    if c_user.is_system or c_user.is_admin_or_dev:
         return
 
     # Check current user's permissions to DELETE entities

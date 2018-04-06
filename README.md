@@ -4,6 +4,12 @@
 ## Changelog
 
 
+### 1.5 (2018-04-06)
+
+- Support of `auth-2.0`.
+- Permissions creating logic refactored.
+
+
 ### 1.4 (2018-03-18)
 
 Support for list as a first argument in `check_permission()`.

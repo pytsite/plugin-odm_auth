@@ -14,6 +14,5 @@ def plugin_load():
     from . import _eh
 
     # Event listeners
-    events.listen('odm@register', _eh.odm_register_model)
     events.listen('odm@entity.pre_save', _eh.odm_entity_pre_save)
     events.listen('odm@entity.pre_delete', _eh.odm_entity_pre_delete)
