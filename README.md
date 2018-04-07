@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.5.1 (2018-04-07)
+
+`plugin.json` fixed.
+
+
 ### 1.5 (2018-04-06)
 
 - Support of `auth-2.0`.
