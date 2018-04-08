@@ -10,9 +10,6 @@ from ._api import check_permission
 
 
 def plugin_load():
-    from pytsite import events
-    from . import _eh
+    from pytsite import lang
 
-    # Event listeners
-    events.listen('odm@entity.pre_save', _eh.odm_entity_pre_save)
-    events.listen('odm@entity.pre_delete', _eh.odm_entity_pre_delete)
+    lang.register_package(__name__)

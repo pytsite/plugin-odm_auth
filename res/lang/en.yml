@@ -1,0 +1,1 @@
+forbid_user_deletion: 'It is not possible to delete account of the user :user, because it owns the entity :entity'

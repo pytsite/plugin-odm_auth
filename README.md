@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.6 (2018-04-08)
+
+Support of `auth-2.3`.
+
+
 ### 1.5.1 (2018-04-07)
 
 `plugin.json` fixed.
