@@ -1,7 +1,12 @@
-# PytSite ODM Auth Plugin
+# PytSite Authorizable ODM Entities Plugin
 
 
 ## Changelog
+
+
+### 1.7 (2018-04-25)
+
+Support of `auth-3.0`.
 
 
 ### 1.6 (2018-04-08)

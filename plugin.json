@@ -1,10 +1,10 @@
 {
   "name": "odm_auth",
-  "version": "1.6",
+  "version": "1.7",
   "description": {
-    "en": "Odm Auth",
-    "ru": "Odm Auth",
-    "uk": "Odm Auth"
+    "en": "Authorizable ODM Entities",
+    "ru": "Authorizable ODM Entities",
+    "uk": "Authorizable ODM Entities"
   },
   "url": "https://github.com/pytsite/plugin-odm_auth",
   "author": {
@@ -14,7 +14,7 @@
   },
   "requires": {
     "plugins": [
-      "auth>=2.3",
+      "auth>=3.0",
       "odm",
       "permissions"
     ]

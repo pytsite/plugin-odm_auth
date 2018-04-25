@@ -79,10 +79,12 @@ class OwnedEntity(_odm.model.Entity):
 
             # Owner was deleted or for some reason cannot be accessed
             except _auth.error.UserNotFound:
-                # Set first admin as owner
-                _auth.switch_user_to_system()
-                self.f_set(field_name, _auth.get_admin_user()).save()
-                _auth.restore_user()
+                try:
+                    # Set first admin as owner
+                    _auth.switch_user_to_system()
+                    self.f_set(field_name, _auth.get_admin_user()).save()
+                finally:
+                    _auth.restore_user()
 
                 return super().f_get(field_name, **kwargs)
 
@@ -94,7 +96,7 @@ class OwnedEntity(_odm.model.Entity):
         c_user = _auth.get_current_user()
 
         # System user and admins have unrestricted permissions
-        if c_user.is_system or c_user.is_admin_or_dev:
+        if c_user.is_system or c_user.is_admin:
             return
 
         # Check current user's permissions to CREATE entities
@@ -115,7 +117,7 @@ class OwnedEntity(_odm.model.Entity):
         c_user = _auth.get_current_user()
 
         # System user and admins have unrestricted permissions
-        if c_user.is_system or c_user.is_admin_or_dev:
+        if c_user.is_system or c_user.is_admin:
             return
 
         # Check current user's permissions to DELETE entities
