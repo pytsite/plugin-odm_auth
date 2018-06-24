@@ -20,20 +20,22 @@ def check_permission(perm_type: _Union[str, _Iterable[str]], model: str, entity_
 
         return False
 
-    global_perm_name = 'odm_auth@{}.{}'.format(perm_type, model)
-    personal_perm_name = 'odm_auth@{}_own.{}'.format(perm_type, model)
-
     if not user:
         user = _auth.get_current_user()
 
-    if user.has_role(('admin', 'dev')):
+    if user.is_admin:
         return True
 
+    # In case of personal permission name was provided
+    perm_type = perm_type.replace('_own', '')
+
     # Check if the user has global permission
+    global_perm_name = 'odm_auth@{}.{}'.format(perm_type, model)
     if _permissions.is_permission_defined(global_perm_name) and user.has_permission(global_perm_name):
         return True
 
     # Check user's personal permission for particular entity
+    personal_perm_name = 'odm_auth@{}_own.{}'.format(perm_type, model)
     if entity_id and _permissions.is_permission_defined(personal_perm_name) and user.has_permission(personal_perm_name):
         # Load entity
         entity = _odm.dispense(model, entity_id)

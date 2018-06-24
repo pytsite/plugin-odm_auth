@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.8 (2018-06-24)
+
+`check_permission()` logic fixed.
+
+
 ### 1.7 (2018-04-25)
 
 Support of `auth-3.0`.

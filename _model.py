@@ -63,12 +63,12 @@ class OwnedEntity(_odm.model.Entity):
         """
         return 'create', 'view', 'modify', 'delete', 'view_own', 'modify_own', 'delete_own'
 
-    def odm_auth_check_permission(self, perm: _Union[str, _Iterable[str]],
+    def odm_auth_check_permission(self, perm_type: _Union[str, _Iterable[str]],
                                   user: _auth.model.AbstractUser = None) -> bool:
         """Check user's permissions
         """
         from . import _api
-        return _api.check_permission(perm, self.model, self.id, user)
+        return _api.check_permission(perm_type, self.model, self.id, user)
 
     def f_get(self, field_name: str, **kwargs):
         """Get field's value
