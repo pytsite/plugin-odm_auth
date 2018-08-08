@@ -1,6 +1,6 @@
 """PytSite ODM Authorizable Entity Model
 """
-__author__ = 'Alexander Shepetko'
+__author__ = 'Oleksandr Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
@@ -61,7 +61,7 @@ class OwnedEntity(_odm.model.Entity):
     def odm_auth_permissions(cls) -> _Tuple[str, ...]:
         """Get permissions supported by model
         """
-        return 'create', 'view', 'modify', 'delete', 'view_own', 'modify_own', 'delete_own'
+        return 'create', 'modify', 'delete', 'modify_own', 'delete_own'
 
     def odm_auth_check_permission(self, perm_type: _Union[str, _Iterable[str]],
                                   user: _auth.model.AbstractUser = None) -> bool:

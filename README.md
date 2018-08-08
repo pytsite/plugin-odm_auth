@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.9 (2018-08-09)
+
+View related permissions removed.
+
+
 ### 1.8 (2018-06-24)
 
 `check_permission()` logic fixed.
