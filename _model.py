@@ -95,8 +95,8 @@ class OwnedEntity(_odm.model.Entity):
 
         c_user = _auth.get_current_user()
 
-        # System user and admins have unrestricted permissions
-        if c_user.is_system or c_user.is_admin:
+        # Admins have unrestricted permissions
+        if c_user.is_admin:
             return
 
         # Check current user's permissions to CREATE entities
@@ -116,8 +116,8 @@ class OwnedEntity(_odm.model.Entity):
 
         c_user = _auth.get_current_user()
 
-        # System user and admins have unrestricted permissions
-        if c_user.is_system or c_user.is_admin:
+        # Admins have unrestricted permissions
+        if c_user.is_admin:
             return
 
         # Check current user's permissions to DELETE entities

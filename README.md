@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 1.9.1 (2018-09-14)
+
+Unnecessary permissions checking removed.
+
+
 ### 1.9 (2018-08-09)
 
 View related permissions removed.
