@@ -1,6 +1,6 @@
 {
   "name": "odm_auth",
-  "version": "1.9.1",
+  "version": "2.0",
   "description": {
     "en": "Authorizable ODM Entities",
     "ru": "Authorizable ODM Entities",
@@ -8,15 +8,16 @@
   },
   "url": "https://github.com/pytsite/plugin-odm_auth",
   "author": {
-    "name": "Alexander Shepetko",
+    "name": "Oleksandr Shepetko",
     "email": "a@shepetko.com",
     "url": "https://shepetko.com"
   },
   "requires": {
-    "plugins": [
-      "auth>=3.0",
-      "odm",
-      "permissions"
-    ]
+    "pytsite": ">=8",
+    "plugins": {
+      "auth": "3.x",
+      "odm": "5.x",
+      "permissions": "1.x"
+    }
   }
 }

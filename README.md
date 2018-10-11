@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.0 (2018-10-11)
+
+Suport of `pytsite-8.x`.
+
+
 ### 1.9.1 (2018-09-14)
 
 Unnecessary permissions checking removed.
