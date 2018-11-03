@@ -29,12 +29,11 @@ class OwnedEntity(_odm.model.Entity):
                             'entity': e,
                         }))
 
-        # Determining model's package name
-        pkg_name = cls.get_package_name()
-
-        # Registering package's language resources
-        if not _lang.is_package_registered(pkg_name):
-            raise RuntimeError("Language package '{}' is not registered".format(pkg_name))
+        # Check for registered lang package
+        lang_pkg_name = cls.lang_package_name()
+        if not _lang.is_package_registered(lang_pkg_name):
+            raise RuntimeError("In order to use '{}' ODM model the '{}' lang package must be registered".
+                               format(model, lang_pkg_name))
 
         # Register permissions
         perm_group = cls.odm_auth_permissions_group()
@@ -45,7 +44,7 @@ class OwnedEntity(_odm.model.Entity):
                     continue
 
                 p_name = 'odm_auth@' + perm_name + '.' + model
-                p_description = cls.resolve_msg_id('odm_auth_' + perm_name + '_' + model)
+                p_description = cls.resolve_lang_msg_id('odm_auth_' + perm_name + '_' + model)
                 _permissions.define_permission(p_name, p_description, perm_group)
 
         # Event handlers
@@ -55,7 +54,7 @@ class OwnedEntity(_odm.model.Entity):
     def odm_auth_permissions_group(cls) -> str:
         """Get model permission group name
         """
-        return cls.get_package_name().split('.')[-1]
+        return cls.package_name().split('.')[-1]
 
     @classmethod
     def odm_auth_permissions(cls) -> _Tuple[str, ...]:
