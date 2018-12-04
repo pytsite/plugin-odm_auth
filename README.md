@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.2 (2018-12-04)
+
+`OwnedEntity.as_jsonable()` implemented.
+
+
 ### 2.1 (2018-11-03)
 
 Support of `odm-5.1`.

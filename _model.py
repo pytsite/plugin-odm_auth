@@ -89,6 +89,16 @@ class OwnedEntity(_odm.model.Entity):
 
         return super().f_get(field_name, **kwargs)
 
+    def as_jsonable(self, **kwargs):
+        r = super().as_jsonable(**kwargs)
+
+        r['permissions'] = {
+            'modify': self.odm_auth_check_permission('modify'),
+            'delete': self.odm_auth_check_permission('delete'),
+        }
+
+        return r
+
     def _pre_save(self, **kwargs):
         super()._pre_save(**kwargs)
 
