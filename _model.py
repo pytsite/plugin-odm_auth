@@ -6,10 +6,10 @@ __license__ = 'MIT'
 
 from typing import Tuple as _Tuple, Iterable as _Iterable, Union as _Union
 from pytsite import lang as _lang, logger as _logger, errors as _errors
-from plugins import auth as _auth, odm as _odm, permissions as _permissions
+from plugins import auth as _auth, odm as _odm, permissions as _permissions, odm_http_api as _odm_http_api
 
 
-class OwnedEntity(_odm.model.Entity):
+class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
     """Entity which has owner and can be authorized to perform certain actions on it.
     """
 

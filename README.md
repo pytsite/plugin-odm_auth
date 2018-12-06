@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.3 (2018-12-06)
+
+Support of `odm_http_api` added.
+
+
 ### 2.2 (2018-12-04)
 
 `OwnedEntity.as_jsonable()` implemented.
