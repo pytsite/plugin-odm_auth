@@ -1,6 +1,6 @@
 {
   "name": "odm_auth",
-  "version": "2.4",
+  "version": "3.0",
   "description": {
     "en": "Authorizable ODM Entities",
     "ru": "Authorizable ODM Entities",
@@ -16,7 +16,7 @@
     "pytsite": ">=8",
     "plugins": {
       "auth": "3.x",
-      "odm": ">=5.1<6",
+      "odm": ">=5.6<6",
       "odm_http_api": "5.x",
       "permissions": "1.x"
     }

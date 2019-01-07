@@ -35,12 +35,14 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             raise RuntimeError("In order to use '{}' ODM model the '{}' lang package must be registered".
                                format(model, lang_pkg_name))
 
-        # Register permissions
+        # Register permissions group
         perm_group = cls.odm_auth_permissions_group()
+
+        # Register permissions
         if perm_group:
-            # Register permissions
             for perm_name in mock.odm_auth_permissions():
-                if perm_name.endswith('_own') and not mock.has_field('author') and not mock.has_field('owner'):
+                # Per-user permission can be registered only if entity has 'author' or 'owner' field
+                if perm_name.endswith('_own') and not (mock.has_field('author') or mock.has_field('owner')):
                     continue
 
                 p_name = 'odm_auth@' + perm_name + '.' + model
@@ -62,12 +64,62 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
         """
         return 'create', 'modify', 'delete', 'modify_own', 'delete_own'
 
-    def odm_auth_check_permission(self, perm_type: _Union[str, _Iterable[str]],
-                                  user: _auth.model.AbstractUser = None) -> bool:
-        """Check user's permissions
+    @classmethod
+    def odm_auth_check_model_permissions(cls, model: str, perm: _Union[str, _Iterable[str]],
+                                         user: _auth.AbstractUser = None) -> bool:
+        """Check if the user can perform operation against ANY entity of model
         """
-        from . import _api
-        return _api.check_permission(perm_type, self.model, self.id, user)
+        # Current user is default
+        if not user:
+            user = _auth.get_current_user()
+
+        # Admin always have all the permissions
+        if user.is_admin:
+            return True
+
+        # Search for at least one permission
+        if isinstance(perm, (list, tuple)):
+            for p in perm:
+                if cls.odm_auth_check_model_permissions(model, p, user):
+                    return True
+            return False
+
+        # Check
+        perm_name = 'odm_auth@{}.{}'.format(perm, model)
+        if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
+            return True
+
+        # No permission found
+        return False
+
+    def odm_auth_check_entity_permissions(self, perm: _Union[str, _Iterable[str]],
+                                          user: _auth.AbstractUser = None) -> bool:
+        """Check if the user can perform operation against entity
+        """
+        # Check for model-wide permission
+        if self.odm_auth_check_model_permissions(self.model, perm, user):
+            return True
+
+        # Current user is default
+        if not user:
+            user = _auth.get_current_user()
+
+        # Search for at least one permission
+        if isinstance(perm, (list, tuple)):
+            for p in perm:
+                if self.odm_auth_check_entity_permissions(p, user):
+                    return True
+            return False
+
+        # Check
+        perm_name = 'odm_auth@{}_own.{}'.format(perm, self.model)
+        if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
+            for author_field in ('author', 'owner'):
+                if self.has_field(author_field) and self.f_get(author_field) == user:
+                    return True
+
+        # No permission found
+        return False
 
     def f_get(self, field_name: str, **kwargs):
         """Get field's value
@@ -93,8 +145,8 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
         r = super().as_jsonable(**kwargs)
 
         r['permissions'] = {
-            'modify': self.odm_auth_check_permission('modify'),
-            'delete': self.odm_auth_check_permission('delete'),
+            'modify': self.odm_auth_check_entity_permissions('modify'),
+            'delete': self.odm_auth_check_entity_permissions('delete'),
         }
 
         return r
@@ -109,13 +161,13 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             return
 
         # Check current user's permissions to CREATE entities
-        if self.is_new and not self.odm_auth_check_permission('create'):
+        if self.is_new and not self.odm_auth_check_entity_permissions('create'):
             _logger.info('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidCreation("Insufficient permissions to create entities of model '{}'.".
                                          format(self.model))
 
         # Check current user's permissions to MODIFY entities
-        if not self.is_new and not self.odm_auth_check_permission('modify'):
+        if not self.is_new and not self.odm_auth_check_entity_permissions('modify'):
             _logger.info('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidModification("Insufficient permissions to modify entity '{}:{}'.".
                                              format(self.model, self.id))
@@ -130,7 +182,7 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             return
 
         # Check current user's permissions to DELETE entities
-        if not self.odm_auth_check_permission('delete'):
+        if not self.odm_auth_check_entity_permissions('delete'):
             _logger.debug('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidDeletion("Insufficient permissions to delete entity '{}:{}'".
                                          format(self.model, self.id))

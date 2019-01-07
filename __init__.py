@@ -6,4 +6,5 @@ __license__ = 'MIT'
 
 # Public API
 from . import _model as model
-from ._api import check_permission
+from ._api import check_model_permissions
+from ._model import OwnedEntity

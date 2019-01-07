@@ -4,6 +4,15 @@
 ## Changelog
 
 
+### 3.0 (2019-01-07)
+
+- API function `check_permission()` refactored and renamed to
+  `check_model_permissions()`.
+- `OwnedEntity.check_permission()` splitted into
+  `odm_auth_check_model_permissions()` and
+  `odm_auth_check_entity_permissions()`.
+
+
 ### 2.4 (2018-12-12)
 
 Support of `odm_http_api-5.x`.
