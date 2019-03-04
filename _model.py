@@ -151,8 +151,8 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
 
         return r
 
-    def _pre_save(self, **kwargs):
-        super()._pre_save(**kwargs)
+    def _on_pre_save(self, **kwargs):
+        super()._on_pre_save(**kwargs)
 
         c_user = _auth.get_current_user()
 
@@ -172,8 +172,8 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             raise _errors.ForbidModification("Insufficient permissions to modify entity '{}:{}'.".
                                              format(self.model, self.id))
 
-    def _pre_delete(self, **kwargs):
-        super()._pre_delete(**kwargs)
+    def _on_pre_delete(self, **kwargs):
+        super()._on_pre_delete(**kwargs)
 
         c_user = _auth.get_current_user()
 

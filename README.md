@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.1 (2019-03-04)
+
+Support of `odm-6.0`.
+
+
 ### 3.0 (2019-01-07)
 
 - API function `check_permission()` refactored and renamed to
