@@ -70,24 +70,23 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
         """Check if the user can perform operation against ANY entity of model
         """
         # Current user is default
-        if not user:
-            user = _auth.get_current_user()
+        user = user or _auth.get_current_user()
 
-        # Admin always have all the permissions
+        # Admins have any permission
         if user.is_admin:
             return True
 
-        # Search for at least one permission
+        # Search for at least one permission in list of permissions
         if isinstance(perm, (list, tuple)):
             for p in perm:
                 if cls.odm_auth_check_model_permissions(model, p, user):
                     return True
-            return False
 
-        # Check
-        perm_name = 'odm_auth@{}.{}'.format(perm, model)
-        if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
-            return True
+        # Check for exact permission
+        else:
+            perm_name = 'odm_auth@{}.{}'.format(perm, model)
+            if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
+                return True
 
         # No permission found
         return False
@@ -96,27 +95,26 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
                                           user: _auth.AbstractUser = None) -> bool:
         """Check if the user can perform operation against entity
         """
+        # Current user is default
+        user = user or _auth.get_current_user()
+
         # Check for model-wide permission
         if self.odm_auth_check_model_permissions(self.model, perm, user):
             return True
 
-        # Current user is default
-        if not user:
-            user = _auth.get_current_user()
-
-        # Search for at least one permission
+        # Search for at least one permission in list of permissions
         if isinstance(perm, (list, tuple)):
             for p in perm:
                 if self.odm_auth_check_entity_permissions(p, user):
                     return True
-            return False
 
-        # Check
-        perm_name = 'odm_auth@{}_own.{}'.format(perm, self.model)
-        if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
-            for author_field in ('author', 'owner'):
-                if self.has_field(author_field) and self.f_get(author_field) == user:
-                    return True
+        # Check for exact permission
+        else:
+            perm_name = 'odm_auth@{}_own.{}'.format(perm, self.model)
+            if _permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
+                for author_field in ('author', 'owner'):
+                    if self.has_field(author_field) and self.f_get(author_field) == user:
+                        return True
 
         # No permission found
         return False

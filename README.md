@@ -4,6 +4,12 @@
 ## Changelog
 
 
+### 3.1.1 (2019-05-23)
+
+Little refactoring of `model.OwnedEntity` permission checking related 
+methods.
+
+
 ### 3.1 (2019-03-04)
 
 Support of `odm-6.0`.
