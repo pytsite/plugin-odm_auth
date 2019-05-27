@@ -8,6 +8,12 @@ from typing import Tuple as _Tuple, Iterable as _Iterable, Union as _Union
 from pytsite import lang as _lang, logger as _logger, errors as _errors
 from plugins import auth as _auth, odm as _odm, permissions as _permissions, odm_http_api as _odm_http_api
 
+PERM_CREATE = 'create'
+PERM_MODIFY = 'modify'
+PERM_DELETE = 'delete'
+PERM_MODIFY_OWN = 'modify_own'
+PERM_DELETE_OWN = 'delete_own'
+
 
 class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
     """Entity which has owner and can be authorized to perform certain actions on it.
@@ -62,7 +68,7 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
     def odm_auth_permissions(cls) -> _Tuple[str, ...]:
         """Get permissions supported by model
         """
-        return 'create', 'modify', 'delete', 'modify_own', 'delete_own'
+        return PERM_CREATE, PERM_MODIFY, PERM_DELETE, PERM_MODIFY_OWN, PERM_DELETE_OWN
 
     @classmethod
     def odm_auth_check_model_permissions(cls, model: str, perm: _Union[str, _Iterable[str]],
@@ -143,8 +149,8 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
         r = super().as_jsonable(**kwargs)
 
         r['permissions'] = {
-            'modify': self.odm_auth_check_entity_permissions('modify'),
-            'delete': self.odm_auth_check_entity_permissions('delete'),
+            PERM_MODIFY: self.odm_auth_check_entity_permissions(PERM_MODIFY),
+            PERM_DELETE: self.odm_auth_check_entity_permissions(PERM_DELETE),
         }
 
         return r
@@ -159,13 +165,13 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             return
 
         # Check current user's permissions to CREATE entities
-        if self.is_new and not self.odm_auth_check_entity_permissions('create'):
+        if self.is_new and not self.odm_auth_check_entity_permissions(PERM_CREATE):
             _logger.info('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidCreation("Insufficient permissions to create entities of model '{}'.".
                                          format(self.model))
 
         # Check current user's permissions to MODIFY entities
-        if not self.is_new and not self.odm_auth_check_entity_permissions('modify'):
+        if not self.is_new and not self.odm_auth_check_entity_permissions(PERM_MODIFY):
             _logger.info('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidModification("Insufficient permissions to modify entity '{}:{}'.".
                                              format(self.model, self.id))
@@ -180,7 +186,7 @@ class OwnedEntity(_odm.model.Entity, _odm_http_api.HTTPAPIEntityMixin):
             return
 
         # Check current user's permissions to DELETE entities
-        if not self.odm_auth_check_entity_permissions('delete'):
+        if not self.odm_auth_check_entity_permissions(PERM_DELETE):
             _logger.debug('Current user login: {}'.format(_auth.get_current_user().login))
             raise _errors.ForbidDeletion("Insufficient permissions to delete entity '{}:{}'".
                                          format(self.model, self.id))

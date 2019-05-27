@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.2 (2019-05-27)
+
+`PERM_*` constants introduced.
+
+
 ### 3.1.1 (2019-05-23)
 
 Little refactoring of `model.OwnedEntity` permission checking related 
