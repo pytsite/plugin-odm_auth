@@ -4,6 +4,12 @@
 ## Changelog
 
 
+### 4.0 (2019-06-02)
+
+- Removed support of `owner` field.
+- Removed `model` from public API.
+
+
 ### 3.2 (2019-05-27)
 
 `PERM_*` constants introduced.
