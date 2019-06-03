@@ -4,10 +4,20 @@
 ## Changelog
 
 
+### 4.1 (2019-06-03)
+
+- `model` returned to the public API.
+- Permission name checking added to 
+  `odm_auth_check_model_permissions()`.
+- Permission existence checking removed from 
+  `odm_auth_check_model_permissions()` and 
+  `odm_auth_check_entity_permissions()`.
+
+
 ### 4.0 (2019-06-02)
 
 - Removed support of `owner` field.
-- Removed `model` from public API.
+- Removed `model` from the public API.
 
 
 ### 3.2 (2019-05-27)
