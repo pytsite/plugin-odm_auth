@@ -1,6 +1,6 @@
 {
   "name": "odm_auth",
-  "version": "4.1",
+  "version": "4.1.1",
   "description": {
     "en": "Authorizable ODM Entities",
     "ru": "Authorizable ODM Entities",

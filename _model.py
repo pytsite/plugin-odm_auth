@@ -116,9 +116,9 @@ class OwnedEntity(odm.model.Entity, odm_http_api.HTTPAPIEntityMixin):
                     return True
 
         # Check for exact permission
-        else:
+        elif self.has_field('author') and self.f_get('author') == user:
             perm_name = f'odm_auth@{perm}_own.{self.model}'
-            if self.has_field('author') and user.has_permission(perm_name) and self.f_get('author') == user:
+            if permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
                 return True
 
         # No permission found
