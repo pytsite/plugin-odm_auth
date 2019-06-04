@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 4.1.2 (2019-06-04)
+
+Bugfix in `OwnedEntity.odm_auth_check_entity_permissions()`.
+
+
 ### 4.1.1 (2019-06-03)
 
 Permission existence checking fixed in 

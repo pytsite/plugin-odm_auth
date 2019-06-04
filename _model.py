@@ -89,9 +89,6 @@ class OwnedEntity(odm.model.Entity, odm_http_api.HTTPAPIEntityMixin):
 
         # Check for exact permission
         else:
-            if perm.endswith('_own'):
-                raise ValueError("Permissions that ends with '_own' must not be checked directly")
-
             perm_name = f'odm_auth@{perm}.{model}'
             if user.has_permission(perm_name):
                 return True
@@ -117,6 +114,9 @@ class OwnedEntity(odm.model.Entity, odm_http_api.HTTPAPIEntityMixin):
 
         # Check for exact permission
         elif self.has_field('author') and self.f_get('author') == user:
+            if perm.endswith('_own'):
+                raise ValueError("Permissions that ends with '_own' must not be checked directly by this method")
+
             perm_name = f'odm_auth@{perm}_own.{self.model}'
             if permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
                 return True
