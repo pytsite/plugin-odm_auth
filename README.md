@@ -4,9 +4,14 @@
 ## Changelog
 
 
+### 4.1.3 (2019-06-04)
+
+Bugfix of `OwnedEntity.odm_auth_check_model_permissions()`.
+
+
 ### 4.1.2 (2019-06-04)
 
-Bugfix in `OwnedEntity.odm_auth_check_entity_permissions()`.
+Bugfix of `OwnedEntity.odm_auth_check_entity_permissions()`.
 
 
 ### 4.1.1 (2019-06-03)

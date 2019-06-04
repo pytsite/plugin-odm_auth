@@ -90,7 +90,7 @@ class OwnedEntity(odm.model.Entity, odm_http_api.HTTPAPIEntityMixin):
         # Check for exact permission
         else:
             perm_name = f'odm_auth@{perm}.{model}'
-            if user.has_permission(perm_name):
+            if permissions.is_permission_defined(perm_name) and user.has_permission(perm_name):
                 return True
 
         # No permission found
